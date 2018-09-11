@@ -1,0 +1,45 @@
+<ion-content>
+  
+  <ion-grid>
+    <ion-row>
+      <ion-col *ngFor="let item of items | async" size="6" size-sm="4" size-md="3" size-lg="2" size-xl="1">
+        <ion-img [src]="item.src" (click)="viewPicture(item)"></ion-img>
+        <ion-icon *ngIf="user" class="delete" name="trash" (click)="deletePicture(item)"></ion-icon>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <ion-fab *ngIf="!web" vertical="bottom" horizontal="center" slot="fixed">
+    <ion-fab-button (click)="getPicture()">
+      <ion-icon name="camera"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+
+  <ion-fab *ngIf="!user" vertical="bottom" horizontal="center" slot="fixed">
+    <ion-fab-button (click)="login()">
+      <ion-icon name="log-in"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+
+  <ion-fab *ngIf="web && user" vertical="bottom" horizontal="center" slot="fixed">
+    <label for="file">
+      <div color="tertiary" class="camera-button">
+        <input id="file" name="file" type="file" class="inputfile" (change)="getPictureWeb($event)" />
+        <ion-icon name="camera"></ion-icon>
+      </div>
+    </label>
+  </ion-fab>
+
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed" *ngIf="user">
+    <ion-fab-button color="dark" (click)="logout()">
+      <ion-icon name="log-out"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed" *ngIf="loading">
+    <ion-fab-button color="secondary">
+      <ion-icon name="refresh"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+
+</ion-content>

@@ -1,0 +1,29 @@
+.camera-button{
+    background-color: #488aff;
+    border-radius: 50%;
+    width: 56px;
+    height: 56px;
+    box-shadow: 0 5px 15px 0 rgba(0, 0, 0, 0.4),0 4px 7px 0 rgba(0, 0, 0, 0.1);
+
+    .inputfile {
+        width: 0.1px;
+        height: 0.1px;
+        opacity: 0;
+        overflow: hidden;
+        position: absolute;
+        z-index: -1;
+        pointer-events: none;
+    }
+
+    ion-icon {
+        color: #FFFFFF;
+        font-size: 24px;
+        margin-left: 16px;
+        margin-top: 16px;
+    }
+}
+
+ion-icon.delete {
+    position: absolute;
+    bottom: 0px;
+}
