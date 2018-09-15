@@ -27,3 +27,10 @@ ion-icon.delete {
     position: absolute;
     bottom: 0px;
 }
+
+ion-content{
+    ion-grid{
+        margin-top: 20px;
+        margin-bottom: 70px;
+    }
+}

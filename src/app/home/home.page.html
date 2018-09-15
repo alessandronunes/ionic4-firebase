@@ -3,7 +3,7 @@
   <ion-grid>
     <ion-row>
       <ion-col *ngFor="let item of items | async" size="6" size-sm="4" size-md="3" size-lg="2" size-xl="1">
-        <ion-img [src]="item.src" (click)="viewPicture(item)"></ion-img>
+        <ion-img [src]="item.src" (click)="viewPicture(item)" cache="true"></ion-img>
         <ion-icon *ngIf="user" class="delete" name="trash" (click)="deletePicture(item)"></ion-icon>
       </ion-col>
     </ion-row>

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { StatusBar } from '@ionic-native/status-bar/ngx';
 
 @Component({
   selector: 'app-image',
@@ -9,12 +10,16 @@ import { ActivatedRoute } from '@angular/router';
 export class ImagePage implements OnInit {
   public src: string = '';
 
-  constructor(private router: ActivatedRoute, ) { }
+  constructor(
+    private router: ActivatedRoute, 
+    private statusBar: StatusBar
+    ) { }
 
   ngOnInit() {
   }
   
   ionViewWillEnter(){
+    this.statusBar.styleLightContent();
     this.src = this.router.snapshot.paramMap.get('src');
   }
 

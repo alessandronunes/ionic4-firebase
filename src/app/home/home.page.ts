@@ -1,32 +1,52 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, AfterContentInit, AfterViewInit } from '@angular/core';
 import { Camera, CameraOptions } from '@ionic-native/camera/ngx';
+import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { Platform } from '@ionic/angular';
-import { AngularFirestore } from '@angular/fire/firestore';
+import { AngularFirestore,  } from '@angular/fire/firestore';
 import { AngularFireStorage } from '@angular/fire/storage';
 import { Router } from '@angular/router';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { auth } from 'firebase';
+//import * as firebase from 'firebase/app';
+
+import { FirebaseCrashlytics } from '@ionic-native/firebase-crashlytics/ngx';
 
 @Component({
   selector: 'app-home',
   templateUrl: 'home.page.html',
   styleUrls: ['home.page.scss'],
 })
-export class HomePage implements OnInit{
+export class HomePage implements AfterViewInit{
   
-  public items: any;
+  public items: any = [];
   public image: any;
   public picture: any;
   public web: boolean = false;
   public loading: boolean = false;
   public user: any = false;
+  public crashlytics: any = false;
 
-  constructor(private afAuth: AngularFireAuth, private router: Router, private storage: AngularFireStorage, private db: AngularFirestore, public platform: Platform, private camera: Camera) { 
-    this.items = [];
+  constructor(
+    private cl: FirebaseCrashlytics,
+    private afAuth: AngularFireAuth, 
+    private router: Router, 
+    private storage: AngularFireStorage, 
+    private db: AngularFirestore, 
+    public platform: Platform, 
+    private camera: Camera,
+    private statusBar: StatusBar
+    ) { 
   }
 
-  ngOnInit(){
-    this.items = this.db.collection('items').valueChanges();
+  ngOnInit(): void {
+    this.items = this.db.collection('items', ref => ref.orderBy('timestamp', 'desc')).valueChanges();
+  }
+
+  ngAfterViewInit(): void {
+    this.statusBar.styleDefault();
+    try{
+      this.crashlytics = this.cl.initialise();
+    }catch(e){console.log(e)}
 
     if (!this.platform.is('cordova')){
       this.web = true;
@@ -49,9 +69,24 @@ export class HomePage implements OnInit{
       }
     });
   }
+
   login() {
-    this.afAuth.auth.signInWithPopup(new auth.GoogleAuthProvider());
+      var provider = new auth.GoogleAuthProvider();
+      this.afAuth.auth.signInWithRedirect(provider).then(function() {
+      return this.afAuth.auth.getRedirectResult();
+    }).then(function(result) {
+      // This gives you a Google Access Token.
+      // You can use it to access the Google API.
+      //var token = result.credential.accessToken;
+      // The signed-in user info.
+      //var user = result.user;
+    }).catch(function(error) {
+      // Handle Errors here.
+      // var errorCode = error.code;
+      // var errorMessage = error.message;
+    });
   }
+
   logout() {
     this.afAuth.auth.signOut();
   }
@@ -134,7 +169,8 @@ export class HomePage implements OnInit{
     this.db.collection("items").add({
         id: id,
         src: url,
-        fileName: fileName
+        fileName: fileName,
+        timestamp: + new Date()
     })
     .then(function(result) {
         //console.log("Document successfully written!", result);
@@ -158,6 +194,10 @@ export class HomePage implements OnInit{
 
   showHideLoading(){
     this.loading = !this.loading;
+  }
+
+  crash(){
+    this.crashlytics.crash();
   }
 
 }

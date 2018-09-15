@@ -16,6 +16,8 @@ import { AngularFireStorageModule } from '@angular/fire/storage';
 import { AngularFireAuthModule } from '@angular/fire/auth';
 import { environment } from '../environments/environment';
 
+import { FirebaseCrashlytics } from '@ionic-native/firebase-crashlytics/ngx';
+
 @NgModule({
   declarations: [AppComponent],
   entryComponents: [],
@@ -32,6 +34,7 @@ import { environment } from '../environments/environment';
     StatusBar,
     SplashScreen,
     Camera,
+    FirebaseCrashlytics,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
   ],
   bootstrap: [AppComponent]
